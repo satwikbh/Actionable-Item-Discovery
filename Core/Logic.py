@@ -1,6 +1,8 @@
-from nltk import word_tokenize
+from nltk import word_tokenize, sent_tokenize
 from nltk.tag import pos_tag
+from numpy import any
 
+from Core.HeuristicRules import HeuristicRules
 from Utils.LoggerUtil import LoggerUtil
 
 
@@ -15,16 +17,24 @@ class Logic:
 
     def __init__(self):
         self.log = LoggerUtil(self.__class__.__name__).get()
+        self.rules = HeuristicRules()
 
-    @staticmethod
-    def work_on_subject(subject):
-        tokens = word_tokenize(subject)
-        pos = pos_tag(tokens)
+    def apply_rules(self, pos, sentences):
+        match_list = list()
+        match_list.append(self.rules.rule_1(pos))
+        match_list.append(self.rules.rule_2(sentences))
+        match_list.append(self.rules.rule_3(pos))
+        match_list.append(self.rules.rule_4(pos))
+        match_list.append(self.rules.rule_5(sentences))
+        match_list.append(self.rules.rule_6(sentences))
+        match_list.append(self.rules.rule_7(pos))
+        return any(match_list)
 
-    @staticmethod
-    def work_on_message(message):
-        tokens = word_tokenize(message)
+    def work_on_text(self, text):
+        tokens = word_tokenize(text)
+        sentences = sent_tokenize(text)
         pos = pos_tag(tokens)
+        return self.apply_rules(pos, sentences)
 
     def main(self, subject, message):
         """
@@ -35,5 +45,9 @@ class Logic:
         :return: True or False
         :rtype boolean
         """
-        self.work_on_subject(subject)
-        self.work_on_message(message)
+        sub_result = self.work_on_text(text=subject)
+        msg_result = self.work_on_text(text=message)
+        if sub_result or msg_result:
+            return True
+        else:
+            return False
