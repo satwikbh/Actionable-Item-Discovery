@@ -21,13 +21,19 @@ class Logic:
 
     def apply_rules(self, pos, sentences):
         match_list = list()
-        match_list.append(self.rules.rule_1(pos))
-        match_list.append(self.rules.rule_2(sentences))
-        match_list.append(self.rules.rule_3(pos))
-        match_list.append(self.rules.rule_4(pos))
+
+        if len(pos) >= 4:
+            match_list.append(self.rules.rule_1(pos))
+        if len(pos) >= 3:
+            match_list.append(self.rules.rule_2(pos))
+        if len(pos) >= 2:
+            match_list.append(self.rules.rule_3(pos))
+            match_list.append(self.rules.rule_4(pos))
+
         match_list.append(self.rules.rule_5(sentences))
         match_list.append(self.rules.rule_6(sentences))
-        match_list.append(self.rules.rule_7(pos))
+        match_list.append(self.rules.rule_7(sentences))
+
         return any(match_list)
 
     def work_on_text(self, text):
