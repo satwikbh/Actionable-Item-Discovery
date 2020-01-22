@@ -1,3 +1,8 @@
+from dask import dataframe as dd
+from nltk.stem import PorterStemmer
+from spacy import load
+from spacy.lang.en.stop_words import STOP_WORDS
+
 from Core.Logic import Logic
 from Utils.LoggerUtil import LoggerUtil
 
@@ -6,6 +11,7 @@ class ProcessData:
     def __init__(self):
         self.log = LoggerUtil(self.__class__.__name__).get()
         self.logic = Logic()
+        self.ps = PorterStemmer()
 
     @staticmethod
     def get_regex_pattern():
@@ -31,7 +37,6 @@ class ProcessData:
         regex_pattern = self.get_regex_pattern()
         new_df = df.message.str.extract(regex_pattern)[[4, 15]]
         new_df.columns = ["subject", "message"]
-        # new_df.insert(0, 'file', df['file'])
         return new_df
 
     @staticmethod
@@ -43,19 +48,40 @@ class ProcessData:
         :param message:
         :return:
         """
-        if "re:" in subject.lower() or "---- forwarded" in message.lower():
+        if "re:" in subject or "---- forwarded" in message:
             return [""] * 2
-        else:
-            return subject.strip(), message.strip()
 
-    def clean_df(self, df):
-        labels = list()
-        for index, row in df.iterrows():
-            subject, message = row['subject'], row['message']
-            subject, message = self.clean_text(subject, message)
-            if subject != "" and message != "":
-                label = self.logic.main(subject, message)
-                labels.append(label)
-            else:
-                labels.append(False)
-        return labels
+    def clean_df(self, df, n_partitions):
+        stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
+        nlp = load("en_core_web_sm")
+
+        df["subject"] = dd.from_pandas(df["subject"], npartitions=n_partitions).map_partitions(
+            lambda my_df: my_df.apply(
+                lambda x: [item.lower().strip() for item in x.split() if
+                           item.lower().strip() not in stop_words]
+            )
+        ).compute()
+
+        df["message"] = dd.from_pandas(df["message"], npartitions=n_partitions).map_partitions(
+            lambda my_df: my_df.apply(
+                lambda x: [item.lower().strip() for item in x.split() if item.lower().strip() not in stop_words]
+            )
+        ).compute()
+
+        df["sub_labels"] = df["subject"].apply(
+            lambda x: False if "re:" in x else True
+        )
+        df["message_labels"] = df["message"].apply(
+            lambda x: False if "----------------------" in x or "forwarded" in x else True
+        )
+
+        df["labels"] = df["sub_labels"] & df["message_labels"]
+        df.drop("sub_labels", inplace=True, axis=1)
+        df.drop("message_labels", inplace=True, axis=1)
+
+        df["labels"] = dd.from_pandas(df, npartitions=n_partitions).map_partitions(
+            lambda my_df: my_df.T.apply(
+                lambda x: self.logic.logic_heuristic_model(nlp=nlp, subject=x["subject"], message=x["message"]) if x[
+                    "labels"] else False
+            )
+        ).compute()

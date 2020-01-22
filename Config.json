@@ -1,5 +1,8 @@
 {
   "data_path": "/home/satwik/Documents/Hiring/huddl_assignment/",
-  "chunksize": 1000,
-  "image_path": "/home/satwik/Documents/Hiring/huddl_assignment/Images/"
+  "chunksize": 500,
+  "image_path": "/home/satwik/Documents/Hiring/huddl_assignment/Images/",
+  "tagged_path": "/home/satwik/Documents/Hiring/huddl_assignment/",
+  "action_verbs_path": "/home/satwik/Documents/Hiring/huddl_assignment/",
+  "n_partitions": 10
 }

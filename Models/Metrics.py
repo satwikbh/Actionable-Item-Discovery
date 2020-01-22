@@ -1,4 +1,4 @@
-from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 from Utils.ConfigUtil import ConfigUtil
 from Utils.LoggerUtil import LoggerUtil
@@ -10,7 +10,9 @@ class Metrics:
         self.log = LoggerUtil(self.__class__.__name__).get()
 
     def metrics(self, y_true, y_predicted):
-        precision, recall, f_score, true_sum = precision_recall_fscore_support(y_true=y_true, y_pred=y_predicted)
-        self.log.info("Precision: {}\tRecall: {}\tFScore: {}\tTrueSum: {}".format(precision, recall, f_score, true_sum))
+        cr_report = classification_report(y_true=y_true, y_pred=y_predicted)
+        acc_score = accuracy_score(y_true=y_true, y_pred=y_predicted)
+        self.log.info("Accuracy Score : {}".format(acc_score))
+        self.log.info("Classification Report: \n{}".format(cr_report))
         cnf_matrix = confusion_matrix(y_true=y_true, y_pred=y_predicted)
         return cnf_matrix

@@ -1,3 +1,4 @@
+dask
 pandas==0.25.3
 nltk==3.4.5
 spacy==2.2.3

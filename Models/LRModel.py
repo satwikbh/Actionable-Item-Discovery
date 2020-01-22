@@ -1,4 +1,4 @@
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 
 from Models.Metrics import Metrics
 from Utils.ConfigUtil import ConfigUtil
@@ -6,16 +6,16 @@ from Utils.Helper import Helper
 from Utils.LoggerUtil import LoggerUtil
 
 
-class DecisionTree:
+class LRModel:
     def __init__(self):
         self.log = LoggerUtil(self.__class__.__name__).get()
         self.config = ConfigUtil.get_config_instance()
-        self.helper = Helper()
         self.metrics = Metrics()
+        self.helper = Helper()
 
     @staticmethod
     def train_model(x_train, y_train):
-        model = DecisionTreeClassifier()
+        model = LogisticRegression()
         model.fit(x_train, y_train)
         return model
 

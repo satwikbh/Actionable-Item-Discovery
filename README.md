@@ -3,13 +3,16 @@
 ## Steps
 #### 1. Normalize the data: 
 Read the data and extract the Subject and Message of the email. The rest of the fields are not necessary.
-Once the subject and message are extracted, parse them to remove punctuations and invalid characters such as "new line (\n)".
+Once the subject and message are extracted, parse them to remove invalid characters such as "new line (\n)". 
+Also ignore those message's which are forwarded. 
+Remove regularly occurring stopwords and other words which frequently occur such as "Enron" which add no value to the learning 
 
 #### 2. Generate heuristic rules for determining if a sentence is actionable or not:
 Priority is given to subject and then to the message. The reason being a subject is a one-line summary of the entire email.
 Hence, a subject containing actionable sentence is more relevant.
 ##### Rules 
     1. Named entity resolution
+        To determing if the email talks about TIME.
     2. Part-of-speech tags extraction
         We consider only these POS tags 
         NN (for nouns)
@@ -20,14 +23,28 @@ Hence, a subject containing actionable sentence is more relevant.
         VBZ (3rdperson singular verb)
         VBN (past participle)
         VBP (non-3rd person singular)
-    3. Co-reference resolution
-    4.  
+        MD (Modal Verb)
+        
+#### 3. Prepare data & perform Classification.
+The data is then applied to the above Heuristic rules and then classified as actionable or not. 
+The validity of this is verified against a Machine Learning Model. 
+This model takes as input both, a distribution of values which are classified as non-actionable by the former model and the pre-tagged dataset given.
 
-POS Rules considered.
+##### ML Models used
+    1. Naive Bayes
+    2. Logistic Regression
+    3. Decision Tree
+    4. Random Forest
+    5. Extra Tree 
+    6. Adaboost
+    7. Multi-Layer Perceptron
 
-1. (MD) (PRP/PRP$) (VB/VBD/VBG/VBN/VBP/VBZ)
-2. (PRP/PRP$) (MD) (VB/VBD/VBG/VBN/VBP/VBZ)
-3. (PRP/PRP$) (VB/VBD/VBG/VBN/VBP/VBZ)
-4. (VB/VBD/VBG/VBN/VBP/VBZ) (PRP/PRP$) (NN/NNS)
-5. (VB/VBD/VBG/VBN/VBP/VBZ) (CC) (PRP/PRP$) (NN/NNS)
-6. (VB/VBD/VBG/VBN/VBP/VBZ) (CC) (PRP/PRP$) (IN) (NN/NNS)
+#### 4. Report results
+The results are reported and the best accuracy is reported by the ensemble model Adaboost at 89.76%. 
+The precision, recall and f1-score values are 0.90, 0.90, 0.90. 
+
+![alt text](Images/confusion_matrix_Adaboost_test.png "Confusion Matrix")
+
+#### 5. Running the Model on the pre-tagged texts
+While running the model on the pre-tagged texts, it reported accuracy 100%. 
+Hence, it can be inferred that the decrease in model's accuracy can be attributed to the fact that there is lot of noise present in the data.
