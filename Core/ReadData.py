@@ -18,6 +18,7 @@ class ReadData:
         self.process_data = ProcessData()
         self.helper = Helper()
         self.ps = PorterStemmer()
+        self.stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
 
     def prepare_data(self, n_rows):
         data_path = self.config["data_path"]
@@ -39,9 +40,12 @@ class ReadData:
         tagged_data = read_csv(tagged_path + "/" + "actions.csv", header=None)
         rows = len(tagged_data)
         tagged_data[0] = tagged_data[0].apply(
-            lambda x: ["".join(item.lower().strip()) for item in x.split() if x.lower().strip() not in STOP_WORDS])
+            lambda x: ["".join(item.lower().strip()) for item in x.split() if x.lower().strip() not in self.stop_words])
         df = DataFrame.from_dict({"data": tagged_data[0].values, "labels": ones(rows, dtype=bool)})
         return df
+
+    def transform_sentence(self, sentence):
+        return [item.lower().strip() for item in sentence.split() if item.lower().strip() not in self.stop_words]
 
 
 if __name__ == '__main__':

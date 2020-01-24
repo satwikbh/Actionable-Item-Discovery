@@ -21,7 +21,7 @@ class Helper:
         plt.figure()
         df = DataFrame(cnf_matrix, range(2), range(2))
         set(font_scale=1.4)
-        heatmap(df, annot=True, annot_kws={"size": 14})
+        heatmap(df, annot=True, annot_kws={"size": 12})
         plt.title('Confusion Matrix for {} Model'.format(model_name))
         plt.ylabel('True Label')
         plt.xlabel('Predicated Label')

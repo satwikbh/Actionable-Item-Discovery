@@ -15,4 +15,4 @@ class Metrics:
         self.log.info("Accuracy Score : {}".format(acc_score))
         self.log.info("Classification Report: \n{}".format(cr_report))
         cnf_matrix = confusion_matrix(y_true=y_true, y_pred=y_predicted)
-        return cnf_matrix
+        return acc_score, cr_report, cnf_matrix

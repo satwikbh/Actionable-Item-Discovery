@@ -29,6 +29,14 @@ class RandomForest:
 
         self.log.info("{} Model performance on test data".format(self.__class__.__name__))
         y_pred = self.test_model(model, x_test)
-        cnf_matrix = self.metrics.metrics(y_true=y_test, y_predicted=y_pred)
+        acc_score, cr_report, cnf_matrix = self.metrics.metrics(y_true=y_test, y_predicted=y_pred)
         self.helper.plot_save_cnf_matrix(cnf_matrix, flag="test", model_name=self.__class__.__name__,
                                          image_path=image_path)
+        return {
+            "model": model,
+            "metrics": {
+                "accuracy": acc_score,
+                "classification_report": cr_report,
+                "confusion_matrix": cnf_matrix
+            }
+        }
