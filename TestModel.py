@@ -39,6 +39,7 @@ class TestModel:
             self.log.info("Given sentence : {}".format(sentence))
             self.log.info("Prediction of Linguistic Model : {}".format(ling_pred))
             self.log.info("Prediction of ML Model : {}".format(any(predictions)))
+            self.log.info("Final Prediction : {}".format(ling_pred or any(predictions)))
         else:
             model, vectorizer = self.model.main()
             tagged_data_df = self.read_data.prepare_tagged_data()

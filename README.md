@@ -40,11 +40,19 @@ This model takes as input both, a distribution of values which are classified as
     7. Multi-Layer Perceptron
 
 #### 4. Report results
-The results are reported and the best accuracy is reported by the ensemble model Adaboost at 89.76%. 
-The precision, recall and f1-score values are 0.90, 0.90, 0.90. 
+The results are reported and the best accuracy is reported by the nueral network MLP 95%. 
+The precision, recall and f1-score values are 0.94, 0.94, 0.94. 
 
 ![alt text](Images/confusion_matrix_Adaboost_test.png "Confusion Matrix")
 
 #### 5. Running the Model on the pre-tagged texts
 While running the model on the pre-tagged texts, it reported accuracy 100%. 
 Hence, it can be inferred that the decrease in model's accuracy can be attributed to the fact that there is lot of noise present in the data.
+
+## Instructions
+1. If main method of TestModel class get's the test flag as False, it'll run and generate all the models. 
+2. If main method of TestModel class get's the test flag as True, it'll prompt the user to enter a sentence in command line.
+3. Once the sentence is entered, two predictions are returned
+    a. The predictions of the heuristic model i.e., applying linguistic rules, is the sentence an actionable item or not.
+    b. The predictions of the best ML model i.e., MLP is given.
+    c. The final prediction is an aggregation of both the above outputs.  
