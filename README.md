@@ -1,4 +1,4 @@
-# huddl_assignment
+# Actionable Item Discovery
 
 ## Steps
 #### 1. Normalize the data: 
