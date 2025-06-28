@@ -1,58 +1,116 @@
 # Actionable Item Discovery
 
-## Steps
-#### 1. Normalize the data: 
-Read the data and extract the Subject and Message of the email. The rest of the fields are not necessary.
-Once the subject and message are extracted, parse them to remove invalid characters such as "new line (\n)". 
-Also ignore those message's which are forwarded. 
-Remove regularly occurring stopwords and other words which frequently occur such as "Enron" which add no value to the learning 
+This project implements a system to identify "actionable items" from text, primarily focusing on email subjects and messages. It combines linguistic heuristic rules with various machine learning models to classify sentences as actionable or not.
 
-#### 2. Generate heuristic rules for determining if a sentence is actionable or not:
-Priority is given to subject and then to the message. The reason being a subject is a one-line summary of the entire email.
-Hence, a subject containing actionable sentence is more relevant.
-##### Rules 
-    1. Named entity resolution
-        To determing if the email talks about TIME.
-    2. Part-of-speech tags extraction
-        We consider only these POS tags 
-        NN (for nouns)
-        NNP (pronouns)
-        PRP (personal pronouns) 
-        VB (present tense verbs)
-        VBD (past tense verb)
-        VBZ (3rdperson singular verb)
-        VBN (past participle)
-        VBP (non-3rd person singular)
-        MD (Modal Verb)
-        
-#### 3. Prepare data & perform Classification.
-The data is then applied to the above Heuristic rules and then classified as actionable or not. 
-The validity of this is verified against a Machine Learning Model. 
-This model takes as input both, a distribution of values which are classified as non-actionable by the former model and the pre-tagged dataset given.
+## Features
 
-##### ML Models used
-    1. Naive Bayes
-    2. Logistic Regression
-    3. Decision Tree
-    4. Random Forest
-    5. Extra Tree 
-    6. Adaboost
-    7. Multi-Layer Perceptron
+*   **Data Normalization:** Cleans and preprocesses input text by removing invalid characters, forwarded messages, and common stopwords.
+*   **Heuristic Rule Engine:** Applies linguistic rules, including Named Entity Recognition (NER) for time and Part-of-Speech (POS) tagging, to identify potential actionable content.
+*   **Machine Learning Classification:** Utilizes a suite of machine learning models to classify sentences based on features derived from the heuristic rules and pre-tagged data.
+*   **Model Evaluation:** Reports performance metrics (accuracy, precision, recall, F1-score) for the trained models.
+*   **Interactive Prediction:** Allows users to input sentences and receive predictions from both the heuristic and the best-performing ML model.
 
-#### 4. Report results
-The results are reported and the best accuracy is reported by the nueral network MLP 95%. 
-The precision, recall and f1-score values are 0.94, 0.94, 0.94. 
+## Installation
 
-![alt text](Images/confusion_matrix_Adaboost_test.png "Confusion Matrix")
+To set up the project, follow these steps:
 
-#### 5. Running the Model on the pre-tagged texts
-While running the model on the pre-tagged texts, it reported accuracy 100%. 
-Hence, it can be inferred that the decrease in model's accuracy can be attributed to the fact that there is lot of noise present in the data.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/Actionable-Item-Discovery.git
+    cd Actionable-Item-Discovery
+    ```
 
-## Instructions
-1. If main method of TestModel class get's the test flag as False, it'll run and generate all the models. 
-2. If main method of TestModel class get's the test flag as True, it'll prompt the user to enter a sentence in command line.
-3. Once the sentence is entered, two predictions are returned
-    a. The predictions of the heuristic model i.e., applying linguistic rules, is the sentence an actionable item or not.
-    b. The predictions of the best ML model i.e., MLP is given.
-    c. The final prediction is an aggregation of both the above outputs.  
+2.  **Create and activate a virtual environment:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Download spaCy language model:**
+    The `run.sh` script handles this, or you can run it manually:
+    ```bash
+    python -m spacy download en_core_web_sm
+    ```
+
+## Usage
+
+The `TestModel.py` script is the main entry point for training models and making predictions.
+
+### Training Models
+
+To train and generate all the machine learning models, run `TestModel.py` with the `test` flag set to `False` (this is the default behavior if no arguments are provided or if `test=False` is explicitly set in the script):
+
+```bash
+python TestModel.py
+```
+
+### Making Predictions
+
+To use the trained models for interactive predictions, run `TestModel.py` with the `test` flag set to `True`:
+
+```bash
+# You might need to modify TestModel.py to set the test flag to True
+# or pass it as a command-line argument if the script supports it.
+# Example (assuming TestModel.py accepts a --test argument):
+python TestModel.py --test
+```
+
+Upon execution, you will be prompted to enter a sentence. The system will then provide two predictions:
+
+1.  **Heuristic Model Prediction:** Based on linguistic rules.
+2.  **ML Model Prediction:** Based on the best-performing machine learning model (MLP).
+
+The final prediction is an aggregation of both outputs.
+
+## Project Structure
+
+*   `Core/`: Contains core logic for data processing, heuristic rules, and data reading.
+    *   `HeuristicRules.py`: Implements the linguistic rules.
+    *   `Logic.py`: Core classification logic.
+    *   `ProcessData.py`: Handles data normalization and preparation.
+    *   `ReadData.py`: Manages data input.
+*   `Models/`: Houses the implementations of various machine learning models.
+    *   `Adaboost.py`
+    *   `DecisionTree.py`
+    *   `ExtraTree.py`
+    *   `LRModel.py` (Logistic Regression)
+    *   `MLP.py` (Multi-Layer Perceptron)
+    *   `NaiveBayes.py`
+    *   `RandomForest.py`
+    *   `Metrics.py`: Contains functions for evaluating model performance.
+*   `Utils/`: Utility functions and configurations.
+    *   `ConfigUtil.py`: Utility for reading configuration.
+    *   `Helper.py`, `HelperClass.py`: General helper functions.
+    *   `LoggerUtil.py`, `logging.json`: Logging utilities.
+*   `CheckPreTaggedData.py`: Script for checking pre-tagged data.
+*   `Config.json`: Configuration file for data paths and parameters.
+*   `LinguisticModel.py`: Likely integrates linguistic processing.
+*   `requirements.txt`: Lists Python dependencies.
+*   `run.sh`: Setup script for virtual environment and spaCy model download.
+*   `TestModel.py`: Main script for model training and prediction.
+*   `Images/`: Stores project-related images, e.g., confusion matrices.
+
+## Models Used
+
+The project utilizes the following machine learning models for classification:
+
+*   Naive Bayes
+*   Logistic Regression
+*   Decision Tree
+*   Random Forest
+*   Extra Tree
+*   Adaboost
+*   Multi-Layer Perceptron (MLP)
+
+## Results
+
+The Multi-Layer Perceptron (MLP) model achieved the best performance with an accuracy of 95%. The precision, recall, and F1-score values were all reported as 0.94.
+
+When run on pre-tagged texts, the model reportedly achieved 100% accuracy, suggesting that noise in the real-world data contributes to the decrease in accuracy.
+
+![Confusion Matrix](Images/confusion_matrix_Adaboost_test.png)

@@ -1,4 +1,5 @@
 from collections import Counter
+import string  # Added for punctuation
 
 from nltk.stem import PorterStemmer
 from numpy import ones
@@ -18,7 +19,10 @@ class ReadData:
         self.process_data = ProcessData()
         self.helper = Helper()
         self.ps = PorterStemmer()
-        self.stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
+        self.stop_words = set.union(
+            STOP_WORDS,
+            {"ect", "hou", "com", "recipient", "na", "ou", "cn", "enron", "zdnet"},
+        )
 
     def prepare_data(self, n_rows):
         data_path = self.config["data_path"]
@@ -40,14 +44,29 @@ class ReadData:
         tagged_data = read_csv(tagged_path + "/" + "actions.csv", header=None)
         rows = len(tagged_data)
         tagged_data[0] = tagged_data[0].apply(
-            lambda x: ["".join(item.lower().strip()) for item in x.split() if x.lower().strip() not in self.stop_words])
-        df = DataFrame.from_dict({"data": tagged_data[0].values, "labels": ones(rows, dtype=bool)})
+            lambda x: [
+                token
+                for item in x.split()
+                if (
+                    token := item.lower().strip().strip(string.punctuation)
+                )  # Python 3.8+ walrus operator
+                and token not in self.stop_words
+            ]
+        )
+        df = DataFrame.from_dict(
+            {"data": tagged_data[0].values, "labels": ones(rows, dtype=bool)}
+        )
         return df
 
     def transform_sentence(self, sentence):
-        return [item.lower().strip() for item in sentence.split() if item.lower().strip() not in self.stop_words]
+        processed_tokens = []
+        for item in sentence.split():
+            token = item.lower().strip().strip(string.punctuation)
+            if token and token not in self.stop_words:
+                processed_tokens.append(token)
+        return processed_tokens
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     read_data = ReadData()
     read_data.prepare_data(n_rows=5000)
