@@ -38,7 +38,9 @@ class Logic:
         match_list.append(any([True if X.ent_type_ == "TIME" else False for X in doc]))
         return any(match_list)
 
-    def logic_heuristic_model(self, subject: List[str], message: List[str], nlp: Any) -> bool:
+    def logic_heuristic_model(
+        self, subject: List[str], message: List[str], nlp: Any
+    ) -> bool:
         """
         Take the subject, message and then validate it against the rules.
         Return true if actionable sentence else false.

@@ -81,7 +81,9 @@ class TestHeuristicRules(unittest.TestCase):
         ):
             self.assertTrue(self.rules.rule_1(pos_md_rb_prp_vb))
 
-        with unittest.mock.patch.object(HeuristicRules, "match4", return_value=[]):  # No match
+        with unittest.mock.patch.object(
+            HeuristicRules, "match4", return_value=[]
+        ):  # No match
             pos_no_match = [("I", "PRP"), ("am", "VBP"), ("going", "VBG")]
             self.assertFalse(self.rules.rule_1(pos_no_match))
 
