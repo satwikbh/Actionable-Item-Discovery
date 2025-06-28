@@ -30,7 +30,7 @@ class HeuristicRules:
     @staticmethod
     def match4(pos, tag1, tag2, tag3, tag4):
         for p, q, r, s in zip(pos, pos[1:], pos[2:], pos[3:]):
-            if p[1] == tag1 and q[1] == tag2 and r[1] == tag3 and s == tag4:
+            if p[1] == tag1 and q[1] == tag2 and r[1] == tag3 and s[1] == tag4: # Corrected s == tag4 to s[1] == tag4
                 return " ".join([p[0], q[0], r[0], s[0]])
         return ""
 
@@ -186,16 +186,16 @@ class HeuristicRules:
         """
         match_list = list()
 
-        match_list.append(['asap' in text_tokens])
-        match_list.append(['a.s.a.p' in text_tokens])
-        match_list.append(['rsvp' in text_tokens])
-        match_list.append(['r.s.v.p' in text_tokens])
-        match_list.append(['eta' in text_tokens])
-        match_list.append(['e.t.a' in text_tokens])
-        match_list.append(['etd' in text_tokens])
-        match_list.append(['e.t.d' in text_tokens])
-        match_list.append(['et' in text_tokens])
-        match_list.append(['e.t' in text_tokens])
+        match_list.append('asap' in text_tokens)
+        match_list.append('a.s.a.p' in text_tokens)
+        match_list.append('rsvp' in text_tokens)
+        match_list.append('r.s.v.p' in text_tokens)
+        match_list.append('eta' in text_tokens)
+        match_list.append('e.t.a' in text_tokens)
+        match_list.append('etd' in text_tokens)
+        match_list.append('e.t.d' in text_tokens)
+        match_list.append('et' in text_tokens)
+        match_list.append('e.t' in text_tokens)
 
         return any(match_list)
 
