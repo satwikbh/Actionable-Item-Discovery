@@ -9,12 +9,12 @@ class Helper:
         pass
 
     @staticmethod
-    def is_list_not_empty(l):
-        return len(l) != 0
+    def is_list_not_empty(input_list):
+        return len(input_list) != 0
 
     @staticmethod
-    def is_list_empty(l):
-        return len(l) == 0
+    def is_list_empty(input_list):
+        return len(input_list) == 0
 
     @staticmethod
     def plot_save_cnf_matrix(cnf_matrix, model_name, flag, image_path):

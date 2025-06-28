@@ -49,7 +49,8 @@ class ProcessData:
         :return:
         """
         if "re:" in subject or "---- forwarded" in message:
-            return [""] * 2
+            return ["", ""]
+        return [subject, message]
 
     def clean_df(self, df, n_partitions):
         stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
@@ -85,3 +86,4 @@ class ProcessData:
                     "labels"] else False
             )
         ).compute()
+        return df
