@@ -15,15 +15,30 @@ class CheckPreTaggedData:
 
     def main(self):
         nlp = load("en_core_web_sm")
-        stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
-        tagged_df = read_csv(self.config["tagged_path"] + "/" + "actions.csv", header=None)
-        tagged_df[0] = tagged_df[0].apply(
-            lambda x: [item.lower().strip() for item in x.split() if item.lower().strip() not in stop_words]
+        stop_words = set.union(
+            STOP_WORDS,
+            {"ect", "hou", "com", "recipient", "na", "ou", "cn", "enron", "zdnet"},
         )
-        tagged_df["labels"] = tagged_df[0].apply(lambda x: self.logic.apply_rules(x, nlp))
-        self.log.info("Values detected by Model in Pre-Tagged Sentences : {}".format(tagged_df.labels.value_counts()))
+        tagged_df = read_csv(
+            self.config["tagged_path"] + "/" + "actions.csv", header=None
+        )
+        tagged_df[0] = tagged_df[0].apply(
+            lambda x: [
+                item.lower().strip()
+                for item in x.split()
+                if item.lower().strip() not in stop_words
+            ]
+        )
+        tagged_df["labels"] = tagged_df[0].apply(
+            lambda x: self.logic.apply_rules(x, nlp)
+        )
+        self.log.info(
+            "Values detected by Model in Pre-Tagged Sentences : {}".format(
+                tagged_df.labels.value_counts()
+            )
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     check = CheckPreTaggedData()
     check.main()
