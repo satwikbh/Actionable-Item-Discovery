@@ -30,7 +30,9 @@ class HeuristicRules:
     @staticmethod
     def match4(pos, tag1, tag2, tag3, tag4):
         for p, q, r, s in zip(pos, pos[1:], pos[2:], pos[3:]):
-            if p[1] == tag1 and q[1] == tag2 and r[1] == tag3 and s[1] == tag4: # Corrected s == tag4 to s[1] == tag4
+            if (
+                p[1] == tag1 and q[1] == tag2 and r[1] == tag3 and s[1] == tag4
+            ):  # Corrected s == tag4 to s[1] == tag4
                 return " ".join([p[0], q[0], r[0], s[0]])
         return ""
 
@@ -46,33 +48,129 @@ class HeuristicRules:
         """
         match_list = list()
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP", "MD", "RB", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VB"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VBD"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VBG"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VBN"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VBP"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP", "MD", "RB", "VBZ"))
+            )
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "PRP$", "MD", "RB", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VB"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VBD"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VBG"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VBN"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VBP"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "PRP$", "MD", "RB", "VBZ"))
+            )
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VB"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VBD"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VBG"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VBN"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VBP"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP", "VBZ"))
+            )
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match4(pos, "MD", "RB", "PRP$", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VB"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VBD"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VBG"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VBN"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VBP"))
+            )
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(
+                list(self.match4(pos, "MD", "RB", "PRP$", "VBZ"))
+            )
+        )
 
         return any(match_list)
 
@@ -88,19 +186,43 @@ class HeuristicRules:
         :return:
         """
         match_list = list()
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP", "VBZ")))
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match3(pos, "MD", "PRP$", "VBZ")))
+        )
         return any(match_list)
 
     def rule_3(self, pos, text_tokens):
@@ -112,35 +234,83 @@ class HeuristicRules:
         """
         match_list = list()
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NN", "VBZ")))
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNS", "VBZ")))
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNP", "VBZ")))
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VB"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBD"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBG"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBN"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBZ"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VB")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBD")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBG")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBN")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "NNPS", "VBZ")))
+        )
 
-        if 'please' in text_tokens:
+        if "please" in text_tokens:
             match_list.append(True)
 
         return any(match_list)
@@ -154,19 +324,43 @@ class HeuristicRules:
         """
         match_list = list()
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VB", "PRP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBD", "PRP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBG", "PRP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBN", "PRP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBP", "PRP"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBZ", "PRP"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VB", "PRP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBD", "PRP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBG", "PRP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBN", "PRP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBP", "PRP")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBZ", "PRP")))
+        )
 
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VB", "PRP$"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBD", "PRP$"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBG", "PRP$"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBN", "PRP$"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBP", "PRP$"))))
-        match_list.append(self.helper.is_list_not_empty(list(self.match2(pos, "VBZ", "PRP$"))))
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VB", "PRP$")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBD", "PRP$")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBG", "PRP$")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBN", "PRP$")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBP", "PRP$")))
+        )
+        match_list.append(
+            self.helper.is_list_not_empty(list(self.match2(pos, "VBZ", "PRP$")))
+        )
 
         return any(match_list)
 
@@ -186,16 +380,16 @@ class HeuristicRules:
         """
         match_list = list()
 
-        match_list.append('asap' in text_tokens)
-        match_list.append('a.s.a.p' in text_tokens)
-        match_list.append('rsvp' in text_tokens)
-        match_list.append('r.s.v.p' in text_tokens)
-        match_list.append('eta' in text_tokens)
-        match_list.append('e.t.a' in text_tokens)
-        match_list.append('etd' in text_tokens)
-        match_list.append('e.t.d' in text_tokens)
-        match_list.append('et' in text_tokens)
-        match_list.append('e.t' in text_tokens)
+        match_list.append("asap" in text_tokens)
+        match_list.append("a.s.a.p" in text_tokens)
+        match_list.append("rsvp" in text_tokens)
+        match_list.append("r.s.v.p" in text_tokens)
+        match_list.append("eta" in text_tokens)
+        match_list.append("e.t.a" in text_tokens)
+        match_list.append("etd" in text_tokens)
+        match_list.append("e.t.d" in text_tokens)
+        match_list.append("et" in text_tokens)
+        match_list.append("e.t" in text_tokens)
 
         return any(match_list)
 

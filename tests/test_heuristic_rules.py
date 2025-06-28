@@ -2,11 +2,12 @@ import unittest
 import sys
 import os
 from unittest.mock import MagicMock
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Core.HeuristicRules import HeuristicRules
 
-class TestHeuristicRules(unittest.TestCase):
 
+class TestHeuristicRules(unittest.TestCase):
     def setUp(self):
         self.rules = HeuristicRules()
         # Mock the logger and helper to avoid external dependencies during tests
@@ -21,19 +22,34 @@ class TestHeuristicRules(unittest.TestCase):
 
     def test_match3(self):
         pos_tags = [("apple", "NN"), ("is", "VBZ"), ("very", "RB"), ("red", "JJ")]
-        self.assertEqual(HeuristicRules.match3(pos_tags, "NN", "VBZ", "RB"), "apple is very")
-        self.assertEqual(HeuristicRules.match3(pos_tags, "VBZ", "RB", "JJ"), "is very red")
+        self.assertEqual(
+            HeuristicRules.match3(pos_tags, "NN", "VBZ", "RB"), "apple is very"
+        )
+        self.assertEqual(
+            HeuristicRules.match3(pos_tags, "VBZ", "RB", "JJ"), "is very red"
+        )
         self.assertEqual(HeuristicRules.match3(pos_tags, "NN", "RB", "JJ"), "")
 
     def test_match4(self):
-        pos_tags = [("this", "DT"), ("apple", "NN"), ("is", "VBZ"), ("very", "RB"), ("red", "JJ")]
+        pos_tags = [
+            ("this", "DT"),
+            ("apple", "NN"),
+            ("is", "VBZ"),
+            ("very", "RB"),
+            ("red", "JJ"),
+        ]
         # Test case where the fourth tag matches
-        self.assertEqual(HeuristicRules.match4(pos_tags, "DT", "NN", "VBZ", "RB"), "this apple is very")
+        self.assertEqual(
+            HeuristicRules.match4(pos_tags, "DT", "NN", "VBZ", "RB"),
+            "this apple is very",
+        )
         # Test case where the fourth tag does not match (using 'JJ' instead of 'RB')
         self.assertEqual(HeuristicRules.match4(pos_tags, "DT", "NN", "VBZ", "JJ"), "")
         # Test case with full sequence match
-        self.assertEqual(HeuristicRules.match4(pos_tags, "NN", "VBZ", "RB", "JJ"), "apple is very red")
-
+        self.assertEqual(
+            HeuristicRules.match4(pos_tags, "NN", "VBZ", "RB", "JJ"),
+            "apple is very red",
+        )
 
     def test_rule_1(self):
         # (PRP/PRP$) (MD) (RB) (VB/VBD/VBG/VBN/VBP/VBZ)
@@ -55,13 +71,17 @@ class TestHeuristicRules(unittest.TestCase):
                 return ["will not I go"]
             return []
 
-        with unittest.mock.patch.object(HeuristicRules, 'match4', side_effect=mock_match4_rule1_prp) as mm4:
+        with unittest.mock.patch.object(
+            HeuristicRules, "match4", side_effect=mock_match4_rule1_prp
+        ):
             self.assertTrue(self.rules.rule_1(pos_prp_md_rb_vb))
 
-        with unittest.mock.patch.object(HeuristicRules, 'match4', side_effect=mock_match4_rule1_md) as mm4:
+        with unittest.mock.patch.object(
+            HeuristicRules, "match4", side_effect=mock_match4_rule1_md
+        ):
             self.assertTrue(self.rules.rule_1(pos_md_rb_prp_vb))
 
-        with unittest.mock.patch.object(HeuristicRules, 'match4', return_value=[]) as mm4: # No match
+        with unittest.mock.patch.object(HeuristicRules, "match4", return_value=[]):  # No match
             pos_no_match = [("I", "PRP"), ("am", "VBP"), ("going", "VBG")]
             self.assertFalse(self.rules.rule_1(pos_no_match))
 
@@ -74,10 +94,14 @@ class TestHeuristicRules(unittest.TestCase):
                 return ["will I go"]
             return []
 
-        with unittest.mock.patch.object(HeuristicRules, 'match3', side_effect=mock_match3_rule2):
+        with unittest.mock.patch.object(
+            HeuristicRules, "match3", side_effect=mock_match3_rule2
+        ):
             self.assertTrue(self.rules.rule_2(pos_md_prp_vb))
 
-        with unittest.mock.patch.object(HeuristicRules, 'match3', return_value=[]): # No match
+        with unittest.mock.patch.object(
+            HeuristicRules, "match3", return_value=[]
+        ):  # No match
             pos_no_match = [("I", "PRP"), ("am", "VBP"), ("going", "VBG")]
             self.assertFalse(self.rules.rule_2(pos_no_match))
 
@@ -94,17 +118,24 @@ class TestHeuristicRules(unittest.TestCase):
                 return ["please go"]
             return []
 
-        with unittest.mock.patch.object(HeuristicRules, 'match2', side_effect=mock_match2_rule3):
+        with unittest.mock.patch.object(
+            HeuristicRules, "match2", side_effect=mock_match2_rule3
+        ):
             self.assertTrue(self.rules.rule_3(pos_nn_vb, tokens_with_please))
 
         # Test with "please" in tokens but no POS match
-        with unittest.mock.patch.object(HeuristicRules, 'match2', return_value=[]):
-            self.assertTrue(self.rules.rule_3(pos_no_match_no_please, tokens_with_please))
+        with unittest.mock.patch.object(HeuristicRules, "match2", return_value=[]):
+            self.assertTrue(
+                self.rules.rule_3(pos_no_match_no_please, tokens_with_please)
+            )
 
         # Test with no "please" and no POS match
-        with unittest.mock.patch.object(HeuristicRules, 'match2', return_value=[]):
-            self.assertFalse(self.rules.rule_3(pos_no_match_no_please, tokens_without_please_no_match))
-
+        with unittest.mock.patch.object(HeuristicRules, "match2", return_value=[]):
+            self.assertFalse(
+                self.rules.rule_3(
+                    pos_no_match_no_please, tokens_without_please_no_match
+                )
+            )
 
     def test_rule_4(self):
         pos_vb_prp = [("call", "VB"), ("him", "PRP")]
@@ -115,10 +146,14 @@ class TestHeuristicRules(unittest.TestCase):
                 return ["call him"]
             return []
 
-        with unittest.mock.patch.object(HeuristicRules, 'match2', side_effect=mock_match2_rule4):
+        with unittest.mock.patch.object(
+            HeuristicRules, "match2", side_effect=mock_match2_rule4
+        ):
             self.assertTrue(self.rules.rule_4(pos_vb_prp))
 
-        with unittest.mock.patch.object(HeuristicRules, 'match2', return_value=[]): # No match
+        with unittest.mock.patch.object(
+            HeuristicRules, "match2", return_value=[]
+        ):  # No match
             pos_no_match = [("he", "PRP"), ("calls", "VBZ")]
             self.assertFalse(self.rules.rule_4(pos_no_match))
 
@@ -147,7 +182,6 @@ class TestHeuristicRules(unittest.TestCase):
         tokens_with_asap_dots = ["send", "it", "a.s.a.p"]
         self.assertTrue(HeuristicRules.rule_6(tokens_with_asap_dots))
 
-
     def test_rule_7(self):
         mock_nlp = MagicMock()
 
@@ -158,13 +192,16 @@ class TestHeuristicRules(unittest.TestCase):
         token_time.ent_type_ = "TIME"
         token_other = MagicMock()
         token_other.ent_type_ = "PERSON"
-        doc_with_time.__iter__.return_value = [token_time, token_other] # Make the doc iterable
+        doc_with_time.__iter__.return_value = [
+            token_time,
+            token_other,
+        ]  # Make the doc iterable
 
         # Case 2: Does not contain a TIME entity
         doc_without_time = MagicMock()
         token_person = MagicMock()
         token_person.ent_type_ = "PERSON"
-        doc_without_time.__iter__.return_value = [token_person] # Make the doc iterable
+        doc_without_time.__iter__.return_value = [token_person]  # Make the doc iterable
 
         tokens_future_related = ["meeting", "is", "tomorrow"]
         tokens_not_future_related = ["meeting", "was", "yesterday"]
@@ -178,5 +215,5 @@ class TestHeuristicRules(unittest.TestCase):
         self.assertFalse(HeuristicRules.rule_7(mock_nlp, tokens_not_future_related))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

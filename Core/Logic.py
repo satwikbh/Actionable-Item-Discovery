@@ -1,5 +1,6 @@
 from nltk.tag import pos_tag
 from numpy import any
+from typing import List, Tuple, Any
 
 from Core.HeuristicRules import HeuristicRules
 from Utils.LoggerUtil import LoggerUtil
@@ -14,13 +15,13 @@ class Logic:
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.log = LoggerUtil(self.__class__.__name__).get()
         self.rules = HeuristicRules()
 
-    def apply_rules(self, text_tokens, nlp):
-        pos = pos_tag(text_tokens)
-        match_list = list()
+    def apply_rules(self, text_tokens: List[str], nlp: Any) -> bool:
+        pos: List[Tuple[str, str]] = pos_tag(text_tokens)
+        match_list: List[bool] = list()
 
         if len(pos) >= 4:
             match_list.append(self.rules.rule_1(pos))
@@ -37,12 +38,12 @@ class Logic:
         match_list.append(any([True if X.ent_type_ == "TIME" else False for X in doc]))
         return any(match_list)
 
-    def logic_heuristic_model(self, subject, message, nlp):
+    def logic_heuristic_model(self, subject: List[str], message: List[str], nlp: Any) -> bool:
         """
         Take the subject, message and then validate it against the rules.
         Return true if actionable sentence else false.
         """
-        sub_val = self.apply_rules(subject, nlp)
-        msg_val = self.apply_rules(message, nlp)
+        sub_val: bool = self.apply_rules(subject, nlp)
+        msg_val: bool = self.apply_rules(message, nlp)
 
         return sub_val or msg_val

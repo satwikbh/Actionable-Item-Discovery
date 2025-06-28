@@ -2,8 +2,8 @@ import unittest
 from sklearn.metrics import confusion_matrix, accuracy_score
 from Models.Metrics import Metrics
 
-class TestMetrics(unittest.TestCase):
 
+class TestMetrics(unittest.TestCase):
     def setUp(self):
         self.metrics_instance = Metrics()
 
@@ -11,7 +11,9 @@ class TestMetrics(unittest.TestCase):
         y_true = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
         y_predicted = [0, 0, 0, 1, 0, 1, 1, 1, 0, 1]
 
-        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(y_true, y_predicted)
+        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(
+            y_true, y_predicted
+        )
 
         # Assert accuracy score
         expected_accuracy = accuracy_score(y_true, y_predicted)
@@ -32,21 +34,26 @@ class TestMetrics(unittest.TestCase):
         y_true = [0, 1, 0, 1]
         y_predicted = [0, 1, 0, 1]
 
-        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(y_true, y_predicted)
+        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(
+            y_true, y_predicted
+        )
 
         self.assertAlmostEqual(acc_score, 1.0)
-        self.assertIn("1.00", cr_report) # Check for perfect scores in report
+        self.assertIn("1.00", cr_report)  # Check for perfect scores in report
         self.assertTrue((cnf_matrix == [[2, 0], [0, 2]]).all())
 
     def test_metrics_with_all_incorrect_predictions(self):
         y_true = [0, 1, 0, 1]
         y_predicted = [1, 0, 1, 0]
 
-        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(y_true, y_predicted)
+        acc_score, cr_report, cnf_matrix = self.metrics_instance.metrics(
+            y_true, y_predicted
+        )
 
         self.assertAlmostEqual(acc_score, 0.0)
-        self.assertIn("0.00", cr_report) # Check for zero scores in report
+        self.assertIn("0.00", cr_report)  # Check for zero scores in report
         self.assertTrue((cnf_matrix == [[0, 2], [2, 0]]).all())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

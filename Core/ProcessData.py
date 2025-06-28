@@ -15,22 +15,24 @@ class ProcessData:
 
     @staticmethod
     def get_regex_pattern():
-        pattern = r'(?:Message-ID: )([\s\S]*)(?:\n)'
-        pattern += r'(?:Date: )([\s\S]*)(?:\n)'
-        pattern += r'(?:From: )(.*)'
-        pattern += r'(?:(?:(?:\n)(?=(?:To:) )(?:To: )([\s\S]*)(?:\n))|(?:(?:\n)(?!(?:To: ))))'
-        pattern += r'(?:Subject: )([\s\S]*)(?:\n)'
-        pattern += r'(?:Mime-Version: )([\s\S]*)(?:\n)'
-        pattern += r'(?:Content-Type: )([\s\S]*)(?:\n)'
-        pattern += r'(?:Content-Transfer-Encoding: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-From: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-To: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-cc: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-bcc: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-Folder: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-Origin: )([\s\S]*)(?:\n)'
-        pattern += r'(?:X-FileName: )(.*)(?:\n)'
-        pattern += r'([\s\S]*$)'
+        pattern = r"(?:Message-ID: )([\s\S]*)(?:\n)"
+        pattern += r"(?:Date: )([\s\S]*)(?:\n)"
+        pattern += r"(?:From: )(.*)"
+        pattern += (
+            r"(?:(?:(?:\n)(?=(?:To:) )(?:To: )([\s\S]*)(?:\n))|(?:(?:\n)(?!(?:To: ))))"
+        )
+        pattern += r"(?:Subject: )([\s\S]*)(?:\n)"
+        pattern += r"(?:Mime-Version: )([\s\S]*)(?:\n)"
+        pattern += r"(?:Content-Type: )([\s\S]*)(?:\n)"
+        pattern += r"(?:Content-Transfer-Encoding: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-From: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-To: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-cc: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-bcc: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-Folder: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-Origin: )([\s\S]*)(?:\n)"
+        pattern += r"(?:X-FileName: )(.*)(?:\n)"
+        pattern += r"([\s\S]*$)"
         return pattern
 
     def get_sub_message(self, df):
@@ -53,37 +55,62 @@ class ProcessData:
         return [subject, message]
 
     def clean_df(self, df, n_partitions):
-        stop_words = set.union(STOP_WORDS, {'ect', 'hou', 'com', 'recipient', 'na', 'ou', 'cn', 'enron', 'zdnet'})
+        stop_words = set.union(
+            STOP_WORDS,
+            {"ect", "hou", "com", "recipient", "na", "ou", "cn", "enron", "zdnet"},
+        )
         nlp = load("en_core_web_sm")
 
-        df["subject"] = dd.from_pandas(df["subject"], npartitions=n_partitions).map_partitions(
-            lambda my_df: my_df.apply(
-                lambda x: [item.lower().strip() for item in x.split() if
-                           item.lower().strip() not in stop_words]
+        df["subject"] = (
+            dd.from_pandas(df["subject"], npartitions=n_partitions)
+            .map_partitions(
+                lambda my_df: my_df.apply(
+                    lambda x: [
+                        item.lower().strip()
+                        for item in x.split()
+                        if item.lower().strip() not in stop_words
+                    ]
+                )
             )
-        ).compute()
-
-        df["message"] = dd.from_pandas(df["message"], npartitions=n_partitions).map_partitions(
-            lambda my_df: my_df.apply(
-                lambda x: [item.lower().strip() for item in x.split() if item.lower().strip() not in stop_words]
-            )
-        ).compute()
-
-        df["sub_labels"] = df["subject"].apply(
-            lambda x: False if "re:" in x else True
+            .compute()
         )
+
+        df["message"] = (
+            dd.from_pandas(df["message"], npartitions=n_partitions)
+            .map_partitions(
+                lambda my_df: my_df.apply(
+                    lambda x: [
+                        item.lower().strip()
+                        for item in x.split()
+                        if item.lower().strip() not in stop_words
+                    ]
+                )
+            )
+            .compute()
+        )
+
+        df["sub_labels"] = df["subject"].apply(lambda x: False if "re:" in x else True)
         df["message_labels"] = df["message"].apply(
-            lambda x: False if "----------------------" in x or "forwarded" in x else True
+            lambda x: False
+            if "----------------------" in x or "forwarded" in x
+            else True
         )
 
         df["labels"] = df["sub_labels"] & df["message_labels"]
         df.drop("sub_labels", inplace=True, axis=1)
         df.drop("message_labels", inplace=True, axis=1)
 
-        df["labels"] = dd.from_pandas(df, npartitions=n_partitions).map_partitions(
-            lambda my_df: my_df.T.apply(
-                lambda x: self.logic.logic_heuristic_model(nlp=nlp, subject=x["subject"], message=x["message"]) if x[
-                    "labels"] else False
+        df["labels"] = (
+            dd.from_pandas(df, npartitions=n_partitions)
+            .map_partitions(
+                lambda my_df: my_df.T.apply(
+                    lambda x: self.logic.logic_heuristic_model(
+                        nlp=nlp, subject=x["subject"], message=x["message"]
+                    )
+                    if x["labels"]
+                    else False
+                )
             )
-        ).compute()
+            .compute()
+        )
         return df

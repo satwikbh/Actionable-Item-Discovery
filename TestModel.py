@@ -47,11 +47,17 @@ class TestModel:
             labels = tagged_data_df["labels"]
             predictions = model.predict(features)
 
-            acc_score, cr_report, cnf_matrix = self.metrics.metrics(y_true=labels, y_predicted=predictions)
-            self.helper.plot_save_cnf_matrix(cnf_matrix=cnf_matrix, model_name="satwik", flag="test",
-                                             image_path=self.config["image_path"])
+            acc_score, cr_report, cnf_matrix = self.metrics.metrics(
+                y_true=labels, y_predicted=predictions
+            )
+            self.helper.plot_save_cnf_matrix(
+                cnf_matrix=cnf_matrix,
+                model_name="satwik",
+                flag="test",
+                image_path=self.config["image_path"],
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test = TestModel()
     test.main(test=True)
